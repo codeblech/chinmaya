@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { useGesture } from '@use-gesture/react';
+import { imageCaptions, airbnbCaptions } from '@/data/captions';
 
-type ImageItem = string | { src: string; alt?: string };
+type ImageItem = string | { src: string; alt?: string; caption?: string };
 
 type DomeGalleryProps = {
   images?: ImageItem[];
@@ -26,6 +27,7 @@ type DomeGalleryProps = {
 type ItemDef = {
   src: string;
   alt: string;
+  caption: string;
   x: number;
   y: number;
   sizeX: number;
@@ -33,14 +35,22 @@ type ItemDef = {
 };
 
 const DEFAULT_IMAGES: ImageItem[] = [
-  ...Array.from({ length: 30 }, (_, i) => ({
-    src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/${i + 1}.webp`,
-    alt: `Image ${i + 1}`
-  })),
-  ...Array.from({ length: 13 }, (_, i) => ({
-    src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/airbnb/${i + 1}.avif`,
-    alt: `Airbnb ${i + 1}`
-  }))
+  ...Array.from({ length: 30 }, (_, i) => {
+    const filename = `${i + 1}.webp`;
+    return {
+      src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/${filename}`,
+      alt: `Image ${i + 1}`,
+      caption: imageCaptions[filename] || ''
+    };
+  }),
+  ...Array.from({ length: 13 }, (_, i) => {
+    const filename = `${i + 1}.avif`;
+    return {
+      src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/airbnb/${filename}`,
+      alt: `Airbnb ${i + 1}`,
+      caption: airbnbCaptions[filename] || ''
+    };
+  })
 ];
 
 const DEFAULTS = {
@@ -74,7 +84,7 @@ function buildItems(pool: ImageItem[], seg: number): ItemDef[] {
 
   const totalSlots = coords.length;
   if (pool.length === 0) {
-    return coords.map(c => ({ ...c, src: '', alt: '' }));
+    return coords.map(c => ({ ...c, src: '', alt: '', caption: '' }));
   }
   if (pool.length > totalSlots) {
     console.warn(
@@ -84,9 +94,9 @@ function buildItems(pool: ImageItem[], seg: number): ItemDef[] {
 
   const normalizedImages = pool.map(image => {
     if (typeof image === 'string') {
-      return { src: image, alt: '' };
+      return { src: image, alt: '', caption: '' };
     }
-    return { src: image.src || '', alt: image.alt || '' };
+    return { src: image.src || '', alt: image.alt || '', caption: image.caption || '' };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
@@ -107,7 +117,8 @@ function buildItems(pool: ImageItem[], seg: number): ItemDef[] {
   return coords.map((c, i) => ({
     ...c,
     src: usedImages[i].src,
-    alt: usedImages[i].alt
+    alt: usedImages[i].alt,
+    caption: usedImages[i].caption
   }));
 }
 
@@ -597,11 +608,32 @@ export default function DomeGallery({
     overlay.style.cssText = `position:absolute; left:${frameR.left - mainR.left}px; top:${frameR.top - mainR.top}px; width:${frameR.width}px; height:${frameR.height}px; opacity:0; z-index:30; will-change:transform,opacity; transform-origin:top left; transition:transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease; border-radius:${openedImageBorderRadius}; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.35);`;
     const rawSrc = parent.dataset.src || (el.querySelector('img') as HTMLImageElement)?.src || '';
     const rawAlt = parent.dataset.alt || (el.querySelector('img') as HTMLImageElement)?.alt || '';
+    const rawCaption = parent.dataset.caption || '';
     const img = document.createElement('img');
     img.src = rawSrc;
     img.alt = rawAlt;
     img.style.cssText = `width:100%; height:100%; object-fit:cover; filter:${grayscale ? 'grayscale(1)' : 'none'};`;
     overlay.appendChild(img);
+
+    if (rawCaption) {
+      const caption = document.createElement('div');
+      caption.className = 'image-caption';
+      caption.textContent = rawCaption;
+      caption.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 12px 16px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+        color: white;
+        font-size: 14px;
+        line-height: 1.4;
+        text-align: center;
+        backdrop-filter: blur(2px);
+      `;
+      overlay.appendChild(caption);
+    }
     viewerRef.current!.appendChild(overlay);
     const tx0 = tileR.left - frameR.left;
     const ty0 = tileR.top - frameR.top;
@@ -784,6 +816,7 @@ export default function DomeGallery({
                   className="sphere-item absolute m-auto"
                   data-src={it.src}
                   data-alt={it.alt}
+                  data-caption={it.caption}
                   data-offset-x={it.x}
                   data-offset-y={it.y}
                   data-size-x={it.sizeX}
