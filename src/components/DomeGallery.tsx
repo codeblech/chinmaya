@@ -32,10 +32,16 @@ type ItemDef = {
   sizeY: number;
 };
 
-const DEFAULT_IMAGES: ImageItem[] = Array.from({ length: 30 }, (_, i) => ({
-  src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/${i + 1}.webp`,
-  alt: `Image ${i + 1}`
-}));
+const DEFAULT_IMAGES: ImageItem[] = [
+  ...Array.from({ length: 30 }, (_, i) => ({
+    src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/${i + 1}.webp`,
+    alt: `Image ${i + 1}`
+  })),
+  ...Array.from({ length: 13 }, (_, i) => ({
+    src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/airbnb/${i + 1}.avif`,
+    alt: `Airbnb ${i + 1}`
+  }))
+];
 
 const DEFAULTS = {
   maxVerticalRotationDeg: 5,
