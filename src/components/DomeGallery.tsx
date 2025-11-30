@@ -32,7 +32,7 @@ type ItemDef = {
   sizeY: number;
 };
 
-const DEFAULT_IMAGES: ImageItem[] = Array.from({ length: 33 }, (_, i) => ({
+const DEFAULT_IMAGES: ImageItem[] = Array.from({ length: 30 }, (_, i) => ({
   src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/${i + 1}.webp`,
   alt: `Image ${i + 1}`
 }));
