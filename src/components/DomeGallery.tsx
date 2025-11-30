@@ -40,7 +40,7 @@ const DEFAULT_IMAGES: ImageItem[] = Array.from({ length: 33 }, (_, i) => ({
 const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
-  enlargeTransitionMs: 300,
+  enlargeTransitionMs: 150,
   segments: 35
 };
 
@@ -125,8 +125,8 @@ export default function DomeGallery({
   enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
   segments = DEFAULTS.segments,
   dragDampening = 2,
-  openedImageWidth = '400px',
-  openedImageHeight = '400px',
+  openedImageWidth = '80vmin',
+  openedImageHeight = '80vmin',
   imageBorderRadius = '30px',
   openedImageBorderRadius = '30px',
   grayscale = true
