@@ -35,7 +35,7 @@ type ItemDef = {
 };
 
 const DEFAULT_IMAGES: ImageItem[] = [
-  ...Array.from({ length: 30 }, (_, i) => {
+  ...Array.from({ length: 32 }, (_, i) => {
     const filename = `${i + 1}.webp`;
     return {
       src: `https://raw.githubusercontent.com/codeblech/chinmaya/main/public/images/${filename}`,
