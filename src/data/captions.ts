@@ -2,7 +2,7 @@
 export const imageCaptions: Record<string, string> = {
   "1.webp": "North side second-floor balcony overlooking the metro station on the west.",
   "2.webp": "Road leading to just outside the west-side main entrance.",
-  "3.webp": "Road leading to just outside the west-side main entrance.",
+  "3.webp": "Huge window in the room facing a full moon. A study desk sits in the corner.",
   "4.webp": "Huge window in the room facing the east park. A study desk sits in the corner.",
   "5.webp": "Huge window in the room facing the east park. A study desk sits in the corner.",
   "6.webp": "East-side park view as seen from the huge window in the room.",
@@ -37,6 +37,8 @@ export const imageCaptions: Record<string, string> = {
   "28.webp": "Sparkling Diwali! (from the terrace)",
   "29.webp": "Diwali! (from the balcony near the kitchen)",
   "30.webp": "A walkway in the east-side park with lush greenery all around.",
+  "31.webp": "Road leading to just outside the west-side main entrance.",
+  "32.webp": "The park on the east side of the house with evening sunlight shining through the trees",
 };
 
 export const airbnbCaptions: Record<string, string> = {
